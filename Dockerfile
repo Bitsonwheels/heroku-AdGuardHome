@@ -1,6 +1,6 @@
 FROM golang:alpine AS build
 
-RUN apk add --update bash git make build-base npm && \
+RUN apk add --update bash git make build-base npm vim mc && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /src/AdGuardHome
