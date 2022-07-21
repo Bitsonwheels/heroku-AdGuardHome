@@ -1,8 +1,8 @@
 {
-  "name": "doh",
+  "name": "AdGuardHome",
   "description": "Deploy doh to Heroku.",
   "keywords": ["dns over https"],
-  "website": "https://github.com/warther/AdGuardHome",
-  "repository": "https://github.com/warther/AdGuardHome",
+  "website": "https://github.com/Bitsonwheels/heroku-AdGuardHome",
+  "repository": "https://github.com/Bitsonwheels/heroku-AdGuardHome",
   "stack": "container"
  }
