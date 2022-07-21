@@ -1,4 +1,6 @@
 FROM golang:alpine AS build
+RUN adduser -D bits
+USER bits
 
 RUN apk add --update bash git make build-base npm vim mc go && \
     rm -rf /var/cache/apk/*
