@@ -6,6 +6,12 @@ FROM golang:ubuntu AS build
 RUN sudo apt update
 RUN sudo apt install bash make build-base yarn npm vim mc go && \
     rm -rf /var/cache/apk/*
+    
+# install cap package and set the capabilities on busybox
+RUN apk add --update --no-cache libcap && \
+    setcap cap_setgid=ep /bin/AdGuardHome && \
+    setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' ./AdGuardHome && \
+    setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' ./bin/AdGuardHome
 
 RUN apk add --no-cache git=2.22.2-r0 \
     --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community \
