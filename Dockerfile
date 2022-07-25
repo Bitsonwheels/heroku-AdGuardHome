@@ -1,24 +1,30 @@
-FROM golang:alpine AS build
-RUN adduser -D bits
-USER bits
+FROM golang:ubuntu AS build
+#RUN adduser -D bits
+#USER bits
 
-RUN apk add --update bash git make build-base npm vim mc go && \
+
+RUN sudo apt update
+RUN sudo apt install bash make build-base yarn npm vim mc go && \
     rm -rf /var/cache/apk/*
+
+RUN apk add --no-cache git=2.22.2-r0 \
+    --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community \
+    --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/main
 
 WORKDIR /src/AdGuardHome
 COPY . /src/AdGuardHome
+RUN npm update
 RUN make
 
-FROM alpine:latest
-LABEL maintainer="AdGuard Team <devteam@adguard.com>"
+#FROM alpine:latest
+#LABEL maintainer="AdGuard Team <devteam@adguard.com>"
 
 # Update CA certs
-RUN apk --no-cache --update add ca-certificates && \
-    rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
+RUN rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
 
 COPY --from=build /src/AdGuardHome/AdGuardHome /opt/adguardhome/AdGuardHome
 
-EXPOSE 8080/tcp 1443/tcp 853/tcp 853/udp 3000/tcp
+EXPOSE 8080/tcp 1443/tcp 1853/tcp 1853/udp 3000/tcp
 
 VOLUME ["/opt/adguardhome/conf", "/opt/adguardhome/work"]
 
