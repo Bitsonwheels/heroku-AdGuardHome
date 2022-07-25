@@ -22,9 +22,6 @@ COPY . /src/AdGuardHome
 RUN npm update
 RUN make
 
-FROM alpine:latest
-LABEL maintainer="AdGuard Team <devteam@adguard.com>"
-
 # Update CA certs
 RUN rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
 
