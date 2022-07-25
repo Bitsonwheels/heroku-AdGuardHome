@@ -1,4 +1,4 @@
-FROM golang:ubuntu AS build
+FROM debian:latest AS build
 #RUN adduser -D bits
 #USER bits
 
