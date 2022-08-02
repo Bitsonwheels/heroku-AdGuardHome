@@ -22,8 +22,8 @@ type firstRunData struct {
 func handleInstallGetAddresses(w http.ResponseWriter, r *http.Request) {
 	log.Tracef("%s %v", r.Method, r.URL)
 	data := firstRunData{}
-	data.WebPort = 8080
-	data.DNSPort = 1553
+	data.WebPort = 80
+	data.DNSPort = 53
 
 	ifaces, err := getValidNetInterfacesForWeb()
 	if err != nil {

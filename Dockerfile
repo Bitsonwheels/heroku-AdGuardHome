@@ -1,33 +1,18 @@
-FROM alpine:latest AS builder
-RUN adduser -D bits
-USER bits
+FROM golang:alpine AS builder
 
-
-RUN sudo apt update
-RUN sudo apk add bash make build-base yarn npm vim mc go && \
+RUN apk add --update bash git make build-base npm && \
     rm -rf /var/cache/apk/*
-    
-# install cap package and set the capabilities on busybox
-RUN sudo apk add --update --no-cache libcap && \
-    sudo setcap cap_setgid=ep /bin/AdGuardHome && \
-    sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' ./AdGuardHome && \
-    sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' ./bin/AdGuardHome
 
-RUN sudo apk add --no-cache git=2.22.2-r0 \
-    --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community \
-    --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/main
+RUN apk --no-cache --update add ca-certificates && \
+    rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
 
+RUN go install github.com/gobuffalo/packr/v2/packr2@v2.8.3  && \
+	go install github.com/gobuffalo/packr/v2/packr2@latest
 WORKDIR /src/AdGuardHome
 COPY . /src/AdGuardHome
-RUN npm update
 RUN make
 
-# Update CA certs
-RUN rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
-
-COPY --from=build /src/AdGuardHome/AdGuardHome /opt/adguardhome/AdGuardHome
-
-#EXPOSE 8080/tcp 1443/tcp 1853/tcp 1853/udp 3000/tcp
+#EXPOSE 80/tcp 443/tcp 853/tcp 853/udp 3000/tcp
 
 VOLUME ["/opt/adguardhome/conf", "/opt/adguardhome/work"]
 

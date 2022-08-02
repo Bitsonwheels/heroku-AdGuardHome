@@ -1,0 +1,22 @@
+FROM golang:alpine AS builder
+
+RUN apk add --update bash git make build-base npm && \
+    rm -rf /var/cache/apk/*
+
+RUN apk --no-cache --update add ca-certificates && \
+    rm -rf /var/cache/apk/* && mkdir -p /opt/adguardhome
+
+RUN go install github.com/gobuffalo/packr/v2/packr2@v2.8.3  && \
+	go install github.com/gobuffalo/packr/v2/packr2@latest
+RUN	npm install -g npm-check-updates && \
+	npx npm-check-updates
+WORKDIR /src/AdGuardHome
+COPY . /src/AdGuardHome
+RUN make
+
+#EXPOSE 80/tcp 443/tcp 853/tcp 853/udp 3000/tcp
+
+VOLUME ["/opt/adguardhome/conf", "/opt/adguardhome/work"]
+
+ENTRYPOINT ["/opt/adguardhome/AdGuardHome"]
+CMD ["-h", "0.0.0.0", "-c", "/opt/adguardhome/conf/AdGuardHome.yaml", "-w", "/opt/adguardhome/work"]
