@@ -21,8 +21,8 @@ require (
 	github.com/sparrc/go-ping v0.0.0-20181106165434-ef3ab45e41b0
 	github.com/stretchr/testify v1.3.0
 	go.uber.org/goleak v0.10.0
-	golang.org/x/net v0.0.0-20190119204137-ed066c81e75e
-	golang.org/x/sys v0.0.0-20190122071731-054c452bb702
+	golang.org/x/net v0.7.0
+	golang.org/x/sys v0.5.0
 	gopkg.in/asaskevich/govalidator.v4 v4.0.0-20160518190739-766470278477
 	gopkg.in/yaml.v2 v2.2.1
 )
